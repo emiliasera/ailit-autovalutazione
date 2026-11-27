@@ -120,15 +120,16 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertic
 .foot p+p{margin-top:6px}
 .foot a{color:inherit}
 /* VISTA A BLOCCHI: una competenza per volta, ragnatela sempre visibile a destra (schermi larghi) */
-.stepbar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px max(5vw,16px)}
-.stepbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap}
+.stepbar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin-bottom:20px;display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap}
+.top{background:transparent;padding:0 0 18px}
+.top .lead,.top .how{max-width:none}
 .stepbtns{display:flex;gap:6px;flex-wrap:wrap;counter-reset:st}
 .stepbtns button{border-color:var(--line);font-weight:500;display:flex;gap:8px;align-items:center;min-height:40px;padding:6px 12px}
 .stepbtns button[aria-current=step]{border-color:var(--ink);background:var(--ink);color:var(--bg);font-weight:700}
 .sn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;font-size:13px;font-weight:700}
 .sn::before{counter-increment:st;content:counter(st)}
 .main{grid-template-columns:minmax(0,1.3fr) minmax(330px,1fr);max-width:1440px}
-.side{position:sticky;top:72px}
+.side{position:sticky;top:16px}
 .results{padding:0}
 .results>div>h2{margin-top:4px}
 body[data-step="0"] #results,body[data-step="2"] #quest{display:none}
@@ -152,39 +153,26 @@ body[data-step="0"] #backQ,body[data-step="2"] #goRes{display:none}
 @media(max-width:600px){.fig{height:340px}.opt{grid-template-columns:minmax(0,1fr);gap:2px}.row{grid-template-columns:minmax(0,1fr)}table{font-size:13px}th,td{padding:6px 4px}}
 /* INCORPORATA NEL BLOG: niente sfondo, niente margini laterali, sempre chiara */
 .emb body,.emb .top,.emb .results{background:transparent}
-.emb .band,.emb .stepbar{padding-left:0;padding-right:0}
-.emb .top{padding-top:8px}
+.emb .band{padding-left:0;padding-right:0}
 .emb .wrap,.emb .main{max-width:none}
-.top .wrap{grid-template-columns:minmax(0,1fr)}
 .namef{margin-top:12px;max-width:24em}
-.stepbar .wrap{justify-content:flex-start}
-.emb .top{padding:4px 0 18px}
-.emb #mainBand{padding-top:22px}
-.emb .lead,.emb .how{max-width:90ch}
+.emb #mainBand{padding-top:6px}
 @media(prefers-reduced-motion:reduce){.tip{transition:none}}
 </style>
 </head>
 <body data-step="0">
-<header class="band top">
-  <div class="wrap">
-    <div>
-      <h1>Autovalutazione AILit per docenti</h1>
-      <p class="lead">Per ognuna delle 19 competenze del framework AILit (OCSE e Commissione europea, 2026) rispondi a due domande: quanto la padroneggi tu e quanto la fai sviluppare ai tuoi studenti. La ragnatela confronta le risposte e ti indica da dove ripartire.</p>
-      <p class="how" style="padding-left:0;max-width:none">Scegli la descrizione più vicina a ciò che fai <b>oggi</b>, non a ciò che vorresti fare.</p>
-    </div>
-  </div>
-</header>
-
-<nav class="stepbar" id="stepbar" aria-label="Passi dell'autovalutazione">
-  <div class="wrap">
-    <div class="stepbtns"><button type="button" data-s="0"><span class="sn"></span>Rispondi</button><button type="button" data-s="1"><span class="sn"></span>Ragnatela</button><button type="button" data-s="2"><span class="sn"></span>Risultati</button></div>
-    <span class="note" id="stTxt" role="status">0 di 19 competenze</span>
-  </div>
-</nav>
-
 <main class="band" id="mainBand">
   <div class="wrap main">
     <div class="lcol">
+      <header class="top">
+        <h1>Autovalutazione AILit per docenti</h1>
+        <p class="lead">Per ognuna delle 19 competenze del framework AILit (OCSE e Commissione europea, 2026) rispondi a due domande: quanto la padroneggi tu e quanto la fai sviluppare ai tuoi studenti. La ragnatela confronta le risposte e ti indica da dove ripartire.</p>
+        <p class="how" style="padding-left:0;max-width:none">Scegli la descrizione più vicina a ciò che fai <b>oggi</b>, non a ciò che vorresti fare.</p>
+      </header>
+      <nav class="stepbar" id="stepbar" aria-label="Passi dell'autovalutazione">
+        <div class="stepbtns"><button type="button" data-s="0"><span class="sn"></span>Rispondi</button><button type="button" data-s="1"><span class="sn"></span>Ragnatela</button><button type="button" data-s="2"><span class="sn"></span>Risultati</button></div>
+        <span class="note" id="stTxt" role="status">0 di 19 competenze</span>
+      </nav>
     <section aria-label="Questionario" id="quest">
       <div class="tabs" role="tablist" id="tabs"></div>
       <div class="chips" id="chips" aria-label="Competenze dell'ambito"></div>
@@ -366,7 +354,7 @@ function renderResults(){
 function renderAll(){renderTabs();renderDom();renderSide();renderResults()}
 function rerender(){renderTabs();renderSide();renderResults();renderNav();save()}
 const MQ=matchMedia("(min-width:901px)"),wide=()=>MQ.matches;
-const toTop=()=>{const y=$("stepbar").offsetTop;if(window.scrollY>y)window.scrollTo({top:y,behavior:"smooth"})};
+const toTop=()=>{const y=Math.max(0,$("quest").getBoundingClientRect().top+window.scrollY-$("stepbar").offsetHeight-24);if(window.scrollY>y)window.scrollTo({top:y,behavior:"smooth"})};
 const goComp=i=>{st.cur=Math.max(0,Math.min(N-1,i));renderTabs();renderDom();save();toTop()};
 const goTab=t=>{const idx=C.map((c,i)=>i).filter(i=>C[i].di===t);goComp(idx.find(i=>!both(i))??idx[0])};
 function renderSteps(){document.querySelectorAll("#stepbar [data-s]").forEach(b=>{if(+b.dataset.s===st.step)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current")})}
