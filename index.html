@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Autovalutazione AILit docenti</title>
+<meta name="description" content="Autovalutazione per docenti sulle 19 competenze del framework AILit (OCSE e Commissione europea): quanto le padroneggi e quanto le fai sviluppare ai tuoi studenti, con ragnatela e prossimi passi.">
+<meta property="og:title" content="Autovalutazione AILit per docenti">
+<meta property="og:description" content="19 competenze di alfabetizzazione all'IA: il tuo profilo personale e didattico a confronto, con i prossimi passi.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday-work: strumento di formazione docenti, chiaro e calmo
+   IDEA la scheda di osservazione a due colonne: io / con i miei studenti
+   PICTURE la ragnatela delle 19 competenze con due linee sovrapposte e lo scarto tra loro
+   COLOUR bianco, inchiostro nero, piani cemento, giallo sulla selezione, viola per la didattica; 4 colori di ambito
+   TYPE Hanken Grotesk 800 per i titoli, 400/500 per il testo
+   LAYOUT laptop: domande a sinistra, ragnatela fissa a destra; telefono: titolo, ragnatela, domande */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#1a1a19);--ink:light-dark(#111111,#efefef);--ink2:light-dark(#555553,#a5a5a0);--plane:light-dark(#ececea,#262624);--line:light-dark(#cfcfcb,#3a3a37);--grid:light-dark(#dcdcd8,#363633);--sel:light-dark(#fff27a,#4a4410);--yel:#ffe600;--vi:light-dark(#6a4ce2,#a596f2);--visoft:light-dark(#efebff,#2a2540);--d1:light-dark(#257de0,#338ced);--d2:light-dark(#f2a600,#d28e05);--d3:light-dark(#00b894,#00a888);--d4:light-dark(#ec4647,#eb6263)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Hanken Grotesk",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.1;margin:0}
+h1{font-size:clamp(32px,4.4vw,48px);text-wrap:balance}
+h2{font-size:24px}
+h3{font-size:18px;line-height:1.3;font-weight:700;letter-spacing:0}
+h4{font-size:15px;margin:16px 0 8px;display:flex;gap:8px;align-items:center}
+p{margin:0}
+.band{padding:clamp(24px,3.5vw,48px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.top{background:var(--plane)}
+.top .wrap{display:grid;gap:18px 40px;grid-template-columns:minmax(0,1fr) minmax(0,22em);align-items:end}
+.lead{color:var(--ink2);max-width:64ch;margin-top:10px}
+.how{margin:14px 0 0;padding-left:1.2em;color:var(--ink2);font-size:15px;max-width:64ch}
+.how li+li{margin-top:2px}
+label.f{font-size:14px;color:var(--ink2);display:block;margin-bottom:4px}
+input[type=text]{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);min-height:44px;width:100%}
+button{font:inherit;font-size:15px;font-weight:600;min-height:44px;padding:8px 14px;border-radius:6px;border:1px solid var(--ink);background:var(--bg);color:var(--ink);cursor:pointer}
+button:hover{background:var(--plane)}
+button:disabled{opacity:.45;cursor:default}
+button.primary{background:var(--ink);color:var(--bg)}
+button.primary:hover{opacity:.88}
+button:focus-visible,input:focus-visible,.opt:focus-within{outline:3px solid var(--d1);outline-offset:2px}
+.main{display:grid;gap:clamp(20px,3vw,40px);grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:start}
+.side{position:sticky;top:16px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.tab{display:flex;gap:8px;align-items:center;border-color:var(--line);font-weight:500}
+.tab[aria-selected=true]{border-color:var(--ink);background:var(--plane);font-weight:700}
+.dot{width:12px;height:12px;border-radius:50%;flex:none}
+.cnt{font-size:13px;color:var(--ink2);white-space:nowrap}
+.dhead{display:grid;grid-template-columns:6px minmax(0,1fr);gap:14px;margin-bottom:8px}
+.dhead .bar{border-radius:3px}
+.dhead p{color:var(--ink2);margin-top:4px}
+.comp{border-top:1px solid var(--line);padding:22px 0 24px}
+.code{display:inline-block;font-weight:800;font-size:14px;min-width:2.4em;padding:1px 6px;border-radius:4px;color:#fff;margin-right:8px;text-align:center;vertical-align:2px}
+.fw{font-size:13px;color:var(--ink2);margin-top:6px}
+.expl{margin-top:8px;font-size:15px}
+.badge{font-size:13px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.b1{background:var(--ink);color:var(--bg)}
+.b2{background:var(--vi);color:#fff}
+.opts{display:grid;gap:6px}
+.opt{position:relative;display:grid;grid-template-columns:9.2em minmax(0,1fr);gap:10px;align-items:start;padding:9px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:15px;line-height:1.45}
+.opt:hover{border-color:var(--ink2)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt b{font-weight:700;display:flex;gap:6px;align-items:center}
+.opt b i{width:16px;height:16px;border:2px solid var(--ink2);border-radius:50%;flex:none}
+.opt.on{background:var(--sel);border-color:var(--ink)}
+.opt.on b i{border-color:var(--ink);background:radial-gradient(circle,var(--ink) 0 4px,transparent 5px)}
+.opts.did .opt.on{background:var(--visoft);border-color:var(--vi)}
+.opts.did .opt.on b i{border-color:var(--vi);background:radial-gradient(circle,var(--vi) 0 4px,transparent 5px)}
+.idea{margin-top:8px;font-size:14px;padding:8px 12px;border-left:3px solid var(--vi);background:var(--visoft);border-radius:0 6px 6px 0}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:8px;flex-wrap:wrap}
+.panel{border:1px solid var(--line);border-radius:10px;padding:16px}
+.phead{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.note{font-size:13px;color:var(--ink2)}
+.ex{background:var(--yel);color:#111;font-size:13px;font-weight:600;padding:2px 8px;border-radius:4px}
+.views{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px}
+.views button{min-height:36px;font-size:14px;padding:4px 10px;border-color:var(--line);font-weight:500}
+.views button[aria-pressed=true]{border-color:var(--ink);background:var(--plane);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink2);margin-top:10px}
+.legend span{display:flex;gap:6px;align-items:center}
+.sw{width:20px;height:0;border-top:2px solid var(--ink)}
+.sw.v{border-top-color:var(--vi)}
+.sw.dash{border-top-style:dashed;border-top-color:var(--ink2)}
+.fig{position:relative;height:420px;margin-top:4px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+svg text{paint-order:stroke;stroke:var(--bg);stroke-width:4px;font-family:inherit}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:13px;line-height:1.35;padding:6px 9px;border-radius:6px;max-width:230px;opacity:0;transition:opacity .12s}
+.rows{display:grid;gap:12px;margin-top:12px}
+.row{display:grid;grid-template-columns:6.6em minmax(0,1fr);gap:10px;align-items:center;font-size:14px}
+.pair{display:grid;gap:4px}
+.bl{display:grid;grid-template-columns:minmax(0,1fr) 5.4em;gap:8px;align-items:center}
+.track{height:10px;background:var(--plane);border-radius:2px;position:relative}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0}
+.mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink2)}
+.val{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.sticky{display:none}
+.results{background:var(--plane)}
+.res{display:grid;gap:clamp(20px,3vw,40px);grid-template-columns:minmax(0,1fr) minmax(0,1fr);margin-top:20px}
+.res h3{margin-top:22px}
+.res>div>h3:first-child{margin-top:0}
+.step{padding:12px 0;border-top:1px solid var(--line)}
+.step p{margin-top:4px}
+.lvl{font-size:13px;font-weight:600;color:var(--ink2)}
+.cmpbox{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-top:12px}
+.cmpbox>div{flex:1 1 14em}
+textarea{width:100%;font:13px/1.4 ui-monospace,monospace;min-height:120px;margin-top:10px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+details{margin-top:22px}
+summary{cursor:pointer;font-weight:600;min-height:32px}
+table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.scroll{overflow-x:auto}
+.foot{font-size:13px;color:var(--ink2)}
+.foot p+p{margin-top:6px}
+.foot a{color:inherit}
+@media(max-width:900px){.main,.res{grid-template-columns:minmax(0,1fr)}.side{position:static;order:-1}.sticky{display:flex;position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px max(5vw,16px);justify-content:space-between;align-items:center;font-size:14px;gap:10px}.top .wrap{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.fig{height:340px}.opt{grid-template-columns:minmax(0,1fr);gap:2px}.row{grid-template-columns:minmax(0,1fr)}table{font-size:13px}th,td{padding:6px 4px}}
+@media(prefers-reduced-motion:reduce){.tip{transition:none}}
+</style>
+</head>
+<body>
+<header class="band top">
+  <div class="wrap">
+    <div>
+      <h1>Autovalutazione AILit per docenti</h1>
+      <p class="lead">Per ognuna delle 19 competenze del framework AILit (OCSE e Commissione europea, 2026) rispondi a due domande: quanto la padroneggi tu e quanto la fai sviluppare ai tuoi studenti. La ragnatela confronta le risposte e ti indica da dove ripartire.</p>
+      <p class="how" style="padding-left:0;max-width:none">Scegli la descrizione più vicina a ciò che fai <b>oggi</b>, non a ciò che vorresti fare.</p>
+    </div>
+    <div><label class="f" for="nome">Nome (facoltativo)</label><input type="text" id="nome" autocomplete="off" placeholder="Per esempio, Anna R."></div>
+  </div>
+</header>
+
+<div class="sticky"><span id="stTxt">0 di 19 competenze</span><button id="stBtn" type="button">Vedi la ragnatela</button></div>
+
+<main class="band">
+  <div class="wrap main">
+    <section aria-label="Questionario">
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div id="dom"></div>
+      <div class="nav"><button type="button" id="prev">← Ambito precedente</button><button type="button" class="primary" id="next">Ambito successivo →</button></div>
+    </section>
+
+    <aside class="side" id="side">
+      <div class="panel">
+        <div class="phead"><h2 id="radTitle">Il tuo profilo</h2><span class="note" id="radNote"></span></div>
+        <div class="views" role="group" aria-label="Linee da mostrare"><button type="button" data-v="both" aria-pressed="true">Entrambe</button><button type="button" data-v="a" aria-pressed="false">Solo io</button><button type="button" data-v="b" aria-pressed="false">Solo con gli studenti</button></div>
+        <div class="legend" id="legend"></div>
+        <div class="fig" id="fig"><svg id="rad" role="img" aria-label="Grafico a ragnatela delle 19 competenze AILit: competenza personale e competenza didattica"></svg><div class="tip" id="tip"></div></div>
+        <div class="rows" id="rows"></div>
+        <div class="acts"><button type="button" class="primary" id="goRes">Vedi i risultati</button><button type="button" id="reset">Ricomincia</button></div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<section class="band results" id="results">
+  <div class="wrap">
+    <h2>Risultati e prossimi passi</h2>
+    <p class="lead" id="resLead"></p>
+    <div class="res">
+      <div>
+        <h3>Dove lo scarto è più grande</h3>
+        <p class="note" style="margin-top:4px">Le competenze in cui la risposta «Io» e quella «Con i miei studenti» sono più distanti.</p>
+        <div id="gaps"></div>
+        <h3>I tuoi prossimi passi personali</h3>
+        <div id="steps"></div>
+      </div>
+      <div>
+        <h3>I tuoi punti di forza</h3>
+        <div id="forze"></div>
+        <h3>Confronta nel tempo</h3>
+        <p class="note" style="margin-top:4px">La pagina non conserva le risposte: scarica il risultato di oggi e tieni il file. È un file di testo con il resoconto e il codice risultato. Quando ripeti l'autovalutazione, per esempio a fine corso, caricalo qui: le linee tratteggiate mostreranno da dove eri partito.</p>
+        <div class="acts"><button type="button" class="primary" id="dl">Scarica il risultato</button><button type="button" id="load">Carica un risultato salvato</button><button type="button" id="unCmp">Togli il confronto</button></div>
+        <input type="file" id="fileIn" accept=".txt,text/plain" hidden>
+        <p style="margin-top:12px;font-size:15px">Il tuo codice risultato:<br><b id="codice" style="font-variant-numeric:tabular-nums;letter-spacing:.03em;overflow-wrap:anywhere"></b></p>
+        <div class="cmpbox"><div><label class="f" for="cmpIn">Oppure confronta con un codice</label><input type="text" id="cmpIn" autocomplete="off" placeholder="38 cifre da 0 a 3"></div><button type="button" id="cmpGo">Confronta</button></div>
+        <p class="note" id="cmpMsg" role="status" style="margin-top:6px"></p>
+        <div class="acts"><button type="button" id="copy">Copia il resoconto</button></div>
+        <p class="note" id="copyMsg" role="status" style="margin-top:6px"></p>
+        <textarea id="copyBox" readonly hidden aria-label="Resoconto da copiare"></textarea>
+      </div>
+    </div>
+    <details>
+      <summary>Tabella completa dei risultati</summary>
+      <div class="scroll"><table><thead><tr><th>Codice</th><th>Competenza</th><th>Io</th><th>Con i miei studenti</th></tr></thead><tbody id="tbody"></tbody></table></div>
+    </details>
+  </div>
+</section>
+
+<footer class="band foot">
+  <div class="wrap">
+    <p>Le descrizioni dei livelli Base, Intermedio e Avanzato adattano le aspettative del framework al lavoro del docente, in linguaggio semplice. Le attività suggerite si ispirano agli scenari «In classe» del framework. I livelli non sono voti: servono a capire da dove partire e qual è il passo successivo. Le risposte non vengono conservate né inviate: ogni volta che apri la pagina il test riparte da zero. Per confrontare i risultati nel tempo, scarica il file del risultato e caricalo quando ripeti l'autovalutazione.</p>
+    <p>Fonte: OECD / Unione europea (2026), <i>Preparare gli studenti all'era dell'IA. Un framework per l'alfabetizzazione all'Intelligenza Artificiale per l'istruzione primaria e secondaria</i>, CC BY 4.0, <a href="https://doi.org/10.1787/65cd27d4-en">doi.org/10.1787/65cd27d4-en</a>. Il presente documento è un adattamento di un'opera originale dell'OCSE e dell'Unione europea. Le opinioni espresse e le argomentazioni utilizzate in questo adattamento non devono essere riportate come rappresentative delle posizioni ufficiali dell'OCSE, dei suoi paesi membri o dell'Unione europea.</p>
+  </div>
+</footer>
+
+<script>
+{
+const D=[{"id": "I", "name": "Interagire con l'IA", "short": "Interagire", "sub": "Riconoscere l'IA, capire come funziona, valutarne risposte e conseguenze. È la base di tutto il framework.", "items": [{"s": "Riconoscere l'IA", "q": "Mi accorgo di dove c'è l'IA e di come influisce sulle scelte delle persone?", "f": "Riconoscere il ruolo e l'influenza dell'IA in diversi contesti.", "e": "L'IA non è solo nei chatbot: è nei social, nei navigatori, nei filtri antispam, nelle piattaforme che suggeriscono contenuti. Riconoscerla è il primo passo per usarla con consapevolezza.", "l": ["So indicare dove si trova l'IA negli strumenti che uso ogni giorno (telefono, social, piattaforme scolastiche).", "So raccontare con esempi concreti come l'IA ha orientato alcune mie scelte: cosa leggo, cosa guardo, cosa mi viene proposto.", "So spiegare come l'IA può influenzare opinioni e comportamenti delle persone, come cittadini, lavoratori e studenti."], "x": "Il gioco «IA o non IA?»: la classe smista oggetti e app di uso quotidiano a seconda che usino o no l'IA, poi discute i casi dubbi."}, {"s": "Spiegare come funziona", "q": "So spiegare come funziona l'IA senza parlarne come se fosse una persona?", "f": "Descrivere il modo in cui i sistemi IA svolgono le attività, utilizzando un linguaggio che analizzi e chiarisca le convinzioni errate più comuni.", "e": "Frasi come «l'IA pensa» o «l'IA ha capito» sono fuorvianti. L'IA calcola la risposta più probabile a partire dai dati con cui è stata addestrata, senza capire davvero il significato.", "l": ["So che l'IA non è una persona: produce risposte calcolando ciò che è più probabile in base ai dati, senza capire davvero.", "So spiegare in modo corretto come funziona uno strumento che uso (per esempio un chatbot) e correggere idee sbagliate come «l'IA ha sempre ragione».", "Quando parlo di IA scelgo parole precise («genera», «calcola», «prevede», non «pensa» o «capisce»), perché so che il linguaggio orienta la fiducia di chi ascolta."], "x": "La classe raccoglie frasi comuni sull'IA («l'IA pensa», «l'IA capisce»), individua quelle fuorvianti e le riscrive in modo corretto."}, {"s": "Controllare le risposte", "q": "Controllo le risposte dell'IA prima di usarle?", "f": "Valutare se gli output dell'IA debbano essere accettati, modificati o rifiutati.", "e": "L'IA può sbagliare o inventare informazioni credibili (le cosiddette «allucinazioni»). Ogni risposta va verificata e poi usata, corretta o scartata.", "l": ["So che le risposte dell'IA possono contenere errori o informazioni inventate e so come controllarle.", "Verifico le risposte dell'IA su fonti affidabili (libri, siti istituzionali, esperti) prima di usarle in classe o nei materiali.", "Decido in modo motivato se usare una risposta così com'è, correggerla o scartarla, e so spiegare il perché."], "x": "Gli studenti confrontano la soluzione di un problema data dall'IA con il procedimento spiegato in classe e cercano eventuali errori."}, {"s": "Suggerimenti personalizzati", "q": "Capisco come l'IA decide che cosa propormi?", "f": "Analizzare in che modo i sistemi di IA predittiva forniscono raccomandazioni che possono orientare o limitare le prospettive.", "e": "Social, piattaforme video e negozi online usano i nostri dati (che cosa guardiamo, che cosa clicchiamo) per suggerirci contenuti. Questo può aprire nuove possibilità, ma anche chiuderci in una «bolla».", "l": ["So che molte app usano i miei dati (che cosa guardo, che cosa clicco) per suggerirmi contenuti o fare previsioni.", "Mi accorgo quando i suggerimenti sono utili e quando invece mi propongono sempre le stesse cose.", "So valutare vantaggi e rischi dei suggerimenti personalizzati, compreso l'effetto «bolla» su idee e comportamenti."], "x": "Gli studenti confrontano i brani suggeriti da un'app musicale con i loro gusti reali e cercano dove l'algoritmo li ha sorpresi e dove li ha chiusi."}, {"s": "Impatto ambientale", "q": "Conosco il costo ambientale dell'IA?", "f": "Confrontare i modi in cui i sistemi IA consumano energia e risorse naturali.", "e": "L'IA funziona grazie a grandi centri di calcolo (data center) che consumano elettricità e acqua e richiedono minerali per l'hardware. Ogni uso ha un costo, anche se non lo vediamo.", "l": ["So che l'IA consuma energia e risorse, come qualsiasi computer, ma su scala molto più grande.", "So indicare i principali impatti ambientali dell'IA: produzione dei dispositivi, data center, consumo di acqua ed energia.", "Tengo conto dell'impatto ambientale quando scelgo se e come usare l'IA e so spiegare come incidono anche le scelte di chi la progetta e la vende."], "x": "Gli studenti elencano i dispositivi della classe che vanno ricaricati o raffreddati e scoprono che anche l'IA ha bisogno di elettricità e di macchine."}, {"s": "Pregiudizi", "q": "So riconoscere i pregiudizi nelle risposte dell'IA?", "f": "Spiegare in che modo l'IA potrebbe essere utilizzata per amplificare i pregiudizi sociali.", "e": "L'IA impara da dati prodotti da persone. Se i dati contengono stereotipi, per esempio su genere o provenienza, l'IA può ripeterli e perfino amplificarli.", "l": ["So che l'IA può ripetere gli stereotipi presenti nei dati con cui è stata addestrata.", "So riconoscere e spiegare con esempi un risultato distorto dell'IA: immagini stereotipate, classificazioni sbagliate, suggerimenti non equi.", "So analizzare chi progetta un sistema di IA e con quali interessi, e chi può esserne avvantaggiato o penalizzato."], "x": "Con l'insegnante, la classe esamina quali dati si possono raccogliere su una persona (altezza, colore preferito…) e scopre che cosa i dati non riescono a dire di lei."}, {"s": "Scelte etiche", "q": "Valuto se un uso dell'IA è giusto, oltre che utile?", "f": "Analizzare in che misura l'uso di un sistema IA è in linea con i principi etici e i valori umani.", "e": "Un uso dell'IA può essere comodo ma avere conseguenze sulla privacy, sull'equità o sul lavoro di altre persone. Valutarlo vuol dire chiedersi chi ci guadagna e chi ci perde.", "l": ["So che un uso dell'IA è più o meno corretto a seconda di come è stato costruito il sistema e dello scopo di chi lo usa.", "So riconoscere quando un uso dell'IA può avere effetti indesiderati, per esempio sulla privacy o sul lavoro di altri.", "Valuto l'uso dell'IA alla luce di principi etici (equità, trasparenza, privacy, responsabilità), pesando vantaggi e svantaggi per le persone coinvolte."], "x": "La classe discute un caso: un'app usa la cronologia di navigazione per offrire sconti. Conviene? Che cosa si cede in cambio?"}]}, {"id": "C", "name": "Creare con l'IA", "short": "Creare", "sub": "Usare l'IA come partner creativo, mantenendo le proprie idee e le proprie scelte al centro.", "items": [{"s": "Trovare nuove idee", "q": "Uso l'IA per allargare le mie idee, senza farmele sostituire?", "f": "Utilizzare i sistemi IA per trovare nuovi punti di vista e approcci basati su idee originali.", "e": "L'IA può essere un compagno di brainstorming: propone spunti, ma l'idea di partenza e le scelte finali restano nostre.", "l": ["So che l'IA può offrirmi spunti e punti di vista a cui non avevo pensato.", "Prima genero le mie idee, poi le confronto con quelle proposte dall'IA.", "Combino in modo mirato le mie idee con quelle dell'IA e so dire che cosa ho tenuto, cambiato o scartato."], "x": "Gli studenti fanno brainstorming da soli, poi confrontano le loro idee con quelle dell'IA e discutono come sono cambiate."}, {"s": "Dare forma alle idee", "q": "Uso strumenti di IA diversi per dare forma concreta a un'idea?", "f": "Visualizzare, creare prototipi e combinare idee utilizzando diversi tipi di sistemi IA.", "e": "Esistono IA che generano testi, immagini, musica, video e codice. Usarle insieme permette di trasformare un'idea in una prima versione concreta (un prototipo).", "l": ["So usare uno strumento di IA per creare un'immagine, un testo o una storia a partire da un'idea.", "Provo strumenti diversi (testo, immagini, audio) e confronto i risultati che ottengo.", "Seleziono e combino i risultati di più strumenti per realizzare un prodotto finito: una presentazione, un racconto illustrato, un video."], "x": "Gli studenti scelgono un tema («la speranza», «l'inverno»), generano un'immagine e spiegano come le parole della richiesta hanno influito sul risultato."}, {"s": "Migliorare con il feedback", "q": "So chiedere all'IA un riscontro utile e usarlo con giudizio?", "f": "Indirizzare i sistemi di IA generativa per ottenere feedback, perfezionare i risultati e favorire la riflessione.", "e": "La qualità della risposta dipende da come chiediamo (il prompt). Il riscontro dell'IA va valutato: alcuni suggerimenti si accolgono, altri no.", "l": ["So scrivere una richiesta (prompt) chiara, con contesto e vincoli, per avere un riscontro utile su un mio lavoro.", "Miglioro un lavoro in più passaggi con l'IA, confrontando ogni risposta con i miei obiettivi.", "So dire quali suggerimenti dell'IA ho accolto, adattato o ignorato e perché, e come hanno cambiato le mie idee."], "x": "La classe confronta due richieste diverse per avere un riscontro sullo stesso testo e scopre quale funziona meglio e perché (contesto, precisione, vincoli)."}, {"s": "Diritti d'autore", "q": "Rispetto i diritti d'autore e dichiaro quando uso l'IA?", "f": "Analizzare in che modo l'IA può salvaguardare o violare l'autenticità dei contenuti e la proprietà intellettuale.", "e": "L'IA può imitare opere protette. Chi crea con l'IA deve chiedersi: è originale? Devo dichiarare l'uso dell'IA? Sto usando il lavoro di qualcun altro?", "l": ["So che i contenuti generati dall'IA possono imitare o copiare opere protette, a danno dei loro autori.", "So quando dichiarare l'uso dell'IA, quando chiedere un'autorizzazione e quando evitarla, e lo faccio nei miei materiali.", "So distinguere tra ispirarsi e copiare e so spiegare perché il mio uso dell'IA rispetta il lavoro degli altri."], "x": "La classe ascolta un brano generato dall'IA «nello stile di» un artista famoso e discute: di chi è? È giusto? Chi va citato?"}]}, {"id": "G", "name": "Gestire l'IA", "short": "Gestire", "sub": "Decidere se, quando e come affidare un compito all'IA, mantenendo il controllo.", "items": [{"s": "Decidere se usarla", "q": "Prima di usare l'IA mi chiedo se serve davvero?", "f": "Decidere se utilizzare i sistemi IA in base alla natura dell'attività.", "e": "Non ogni compito ha bisogno dell'IA. A volte basta un motore di ricerca, un libro o il nostro ragionamento; a volte è indispensabile il giudizio umano.", "l": ["So che strumenti diversi servono a compiti diversi: per esempio un chatbot per riassumere, un motore di ricerca per trovare fonti.", "Prima di usare l'IA mi chiedo se è lo strumento giusto per quel compito.", "Decido se usare l'IA valutando quanto è complesso il compito, quanto serve il giudizio umano e quali problemi etici solleva."], "x": "La classe abbina compiti scolastici e strumenti: che cosa faccio con l'IA, che cosa con un motore di ricerca, che cosa da solo?"}, {"s": "Scegliere l'IA adatta", "q": "So che esistono tipi diversi di IA e scelgo quello adatto?", "f": "Scegliere un approccio all'intelligenza artificiale appropriato per una determinata attività facendo un confronto tra il modo in cui funzionano i diversi sistemi IA e ciò per cui sono più adatti.", "e": "Alcuni sistemi seguono regole scritte da persone (come un termostato), altri imparano dagli esempi contenuti nei dati (come il riconoscimento delle immagini). Ognuno va bene per compiti diversi.", "l": ["So che alcuni sistemi seguono regole fisse scritte da persone, mentre altri imparano dagli esempi contenuti nei dati.", "So dire quando conviene un sistema a regole fisse e quando uno che impara dai dati, con vantaggi e svantaggi.", "Scelgo il tipo di IA, o di non usarla, considerando il contesto, i dati disponibili, la trasparenza e le possibili conseguenze."], "x": "Uno studente fa il «robot» che smista immagini di rifiuti seguendo le regole date dai compagni; poi la classe scopre che cosa succede con un oggetto mai visto."}, {"s": "Dividere il lavoro", "q": "So decidere quali parti di un lavoro affidare all'IA e quali tenere per me?", "f": "Scomporre un problema per determinare quando e in che modo i sistemi IA debbano essere utilizzati per automatizzare o potenziare lo svolgimento delle attività.", "e": "Un compito complesso si divide in fasi. In alcune l'IA può fare da sola, in altre può aiutarci, in altre serve solo il lavoro umano.", "l": ["So riconoscere il tipo di problema (di dati, creativo, emotivo) e capire se l'IA può aiutare.", "Divido un lavoro in fasi e individuo in quali l'IA può essere utile.", "Assegno consapevolmente ogni fase all'IA o alle persone, in base a ciò che ciascuno sa fare meglio."], "x": "Gli studenti dividono la stesura di un tema in fasi (argomento, ricerca, scaletta, scrittura, revisione) e decidono dove l'IA può aiutare e dove no."}, {"s": "Tenere il controllo", "q": "Quando lavoro con l'IA, controllo come sta andando e correggo la rotta?", "f": "Monitorare e valutare l'uso dell'IA durante un processo di risoluzione dei problemi.", "e": "Lavorare con l'IA richiede verifiche lungo il percorso: il risultato va nella direzione giusta? Devo riformulare la richiesta o intervenire io?", "l": ["So che usare l'IA richiede scelte responsabili, che tutelino l'apprendimento e l'equità.", "Confronto i risultati dell'IA con ciò che volevo ottenere e so quando riformulare la richiesta o intervenire io.", "Fisso in anticipo dei momenti di verifica e dei criteri di successo e cambio la divisione dei compiti se serve."], "x": "La classe esamina esempi di IA nello sport, nel giornalismo o nella musica e discute in quali momenti serve una persona a controllare."}]}, {"id": "P", "name": "Plasmare l'IA", "short": "Plasmare", "sub": "Capire come sono costruiti gli strumenti di IA e proporre miglioramenti. È l'ambito più avanzato: è normale partire da qui con punteggi bassi.", "items": [{"s": "Capire a che cosa serve", "q": "So capire per chi è fatto uno strumento di IA e quali limiti ha?", "f": "Indagare sul modo in cui un sistema IA è destinato a funzionare, sugli utenti per cui è stato progettato e sui suoi limiti.", "e": "Ogni strumento di IA nasce per uno scopo e per certi utenti. Conoscere scopo, utenti previsti e limiti aiuta a usarlo nel modo giusto. Spesso queste informazioni sono nelle schede tecniche o nelle condizioni d'uso.", "l": ["So individuare per quale compito è stato progettato uno strumento di IA.", "So descrivere di uno strumento lo scopo, gli utenti a cui è destinato e i limiti principali (per esempio l'età minima d'uso).", "So valutare punti di forza e limiti di uno strumento considerando scopo, utenti, vincoli e conseguenze sulle persone."], "x": "La classe legge la scheda o le condizioni d'uso di uno strumento di IA e discute come usarlo in modo appropriato."}, {"s": "Valutare se funziona", "q": "So stabilire con criteri chiari se uno strumento di IA funziona bene?", "f": "Valutare i sistemi IA utilizzando criteri definiti, risultati attesi, casi prova e feedback degli utenti.", "e": "Per giudicare uno strumento non basta l'impressione: servono criteri (è preciso? è chiaro? è equo?), prove con casi diversi e il parere di chi lo usa.", "l": ["So stabilire dei criteri per decidere se uno strumento di IA ha svolto bene un compito.", "Valuto uno strumento con criteri precisi, provandolo su casi diversi e raccogliendo il parere di chi lo usa.", "Confronto come funziona lo stesso strumento con utenti e richieste diverse e uso i risultati per proporre miglioramenti."], "x": "A gruppi, gli studenti decidono che cosa rende «buono» un sistema che consiglia musica e lo provano con gusti diversi."}, {"s": "Il ruolo dei dati", "q": "So che i dati usati per addestrare un'IA ne determinano il comportamento?", "f": "Progettare sistemi IA prestando attenzione al modo in cui le fonti e la selezione di dati, nonché il flusso di informazioni, influenzano il comportamento e gli output.", "e": "Un'IA è buona quanto i dati da cui impara. Quanti sono, da dove vengono, chi rappresentano: ogni scelta sui dati cambia i risultati.", "l": ["So fare esempi dei dati che servirebbero per «insegnare» un compito a un sistema di IA.", "So spiegare perché conta come vengono scelti e raccolti i dati, soprattutto quando l'IA prende decisioni sulle persone.", "So valutare come quantità, varietà e distorsioni dei dati cambiano il funzionamento e le conseguenze di un sistema di IA."], "x": "A gruppi, gli studenti progettano un'IA che smista i rifiuti riciclabili e decidono quali immagini servirebbero per addestrarla."}, {"s": "Migliorarla per tutti", "q": "So proporre modifiche per rendere uno strumento di IA più utile e inclusivo?", "f": "Migliorare i sistemi IA per affrontare e promuovere il benessere delle persone e i benefici per la società.", "e": "Gli strumenti di IA non sono immutabili: si possono adattare perché siano più accessibili, inclusivi e attenti al benessere delle persone e dell'ambiente.", "l": ["So che gli strumenti di IA possono essere progettati o modificati per aiutare meglio persone, comunità e ambiente.", "So proporre modifiche concrete a uno strumento di IA: istruzioni più chiare, opzioni per bisogni diversi, maggiore accessibilità.", "Propongo miglioramenti motivati, tenendo conto di limiti tecnici, questioni etiche e bisogni reali degli utenti."], "x": "Gli studenti partono dalle difficoltà quotidiane a scuola e propongono modifiche a uno strumento di IA per renderlo più utile o inclusivo."}]}];
+const LA=["Non ancora","Base","Intermedio","Avanzato"];
+const LB=["Non ancora","Ne parlo","Propongo attività","Progetto e valuto"];
+const TB=["Non l'ho ancora affrontata con le mie classi.","Ne parlo quando capita l'occasione, senza un'attività dedicata.","Propongo attività mirate, come quella suggerita qui sotto.","La inserisco nella mia progettazione, con obiettivi, attività e criteri per osservare i progressi degli studenti."];
+const COL=["var(--d1)","var(--d2)","var(--d3)","var(--d4)"];
+const C=[];
+D.forEach((d,di)=>d.items.forEach((it,j)=>C.push({...it,code:d.id+(j+1),di,col:COL[di],dom:d.name})));
+const N=C.length;
+const EXA=[2,2,2,1,1,2,1,2,2,2,1,2,1,1,1,1,0,0,1];
+const EXB=[1,1,2,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0];
+const KEY="ailit-docenti-v1";
+let st={a:Array(N).fill(null),b:Array(N).fill(null),name:"",cmp:null,tab:0,view:"both"};
+try{localStorage.removeItem(KEY)}catch(e){}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const save=()=>{};
+const isEx=()=>false;
+const none=()=>st.a.every(v=>v===null)&&st.b.every(v=>v===null);
+const both=i=>st.a[i]!==null&&st.b[i]!==null;
+const doneN=()=>C.filter((c,i)=>both(i)).length;
+const V=k=>isEx()?(k==="a"?EXA:EXB):st[k].map(v=>v===null?0:v);
+const ans=(k,i)=>isEx()||st[k][i]!==null;
+const fmt=x=>x.toFixed(1).replace(".",",");
+const avg=(arr,di)=>{const v=C.map((c,i)=>c.di===di?arr[i]:null).filter(x=>x!==null);return v.reduce((s,x)=>s+x,0)/v.length};
+const codeOf=()=>st.a.map(v=>v===null?0:v).join("")+"-"+st.b.map(v=>v===null?0:v).join("");
+const lab=(k,v)=>(k==="a"?LA:LB)[v];
+
+function renderTabs(){
+  $("tabs").innerHTML=D.map((d,i)=>{const n=C.filter((c,k)=>c.di===i&&both(k)).length;return `<button type="button" class="tab" role="tab" aria-selected="${i===st.tab}" data-t="${i}"><span class="dot" style="background:${COL[i]}"></span>${esc(d.name)} <span class="cnt">${n}/${d.items.length}</span></button>`}).join("");
+}
+function optList(k,i){
+  const texts=k==="a"?["Non mi riconosco ancora nella descrizione del livello base.",...C[i].l]:TB;
+  const labels=k==="a"?LA:LB;
+  return `<div class="opts${k==="b"?" did":""}" role="radiogroup" aria-label="${k==="a"?"Io":"Con i miei studenti"}, ${C[i].code}">`+texts.map((t,v)=>{const on=st[k][i]===v;return `<label class="opt${on?" on":""}"><input type="radio" name="${k}${i}" value="${v}" data-i="${i}" data-k="${k}"${on?" checked":""}><b><i></i>${labels[v]}</b><span>${esc(t)}</span></label>`}).join("")+`</div>`;
+}
+function renderDom(){
+  const d=D[st.tab];
+  let h=`<div class="dhead"><div class="bar" style="background:${COL[st.tab]}"></div><div><h2>${esc(d.name)}</h2><p>${esc(d.sub)}</p></div></div>`;
+  C.forEach((c,i)=>{if(c.di!==st.tab)return;
+    h+=`<div class="comp" id="c-${c.code}"><h3><span class="code" style="background:${c.col}">${c.code}</span>${esc(c.q)}</h3><p class="fw">Nel framework: ${esc(c.f)}</p><p class="expl">${esc(c.e)}</p>`;
+    h+=`<h4><span class="badge b1">1 · Io</span>nel mio lavoro</h4>`+optList("a",i);
+    h+=`<h4><span class="badge b2">2 · Con i miei studenti</span>in classe</h4>`+optList("b",i);
+    h+=`<p class="idea"><b>Un'attività per iniziare:</b> ${esc(c.x)}</p></div>`});
+  $("dom").innerHTML=h;
+  $("prev").disabled=st.tab===0;
+  $("next").textContent=st.tab===D.length-1?"Vedi i risultati →":"Ambito successivo →";
+}
+function drawRadar(){
+  const s=$("rad"),W=s.clientWidth,Hh=s.clientHeight;if(!W||!Hh)return;
+  const small=W<520,cx=W/2,cy=Hh/2,R=Math.max(60,Math.min(W,Hh)/2-(small?48:46));
+  const ex=isEx(),step=2*Math.PI/N;
+  const ang=i=>-Math.PI/2+i*step;
+  const pt=(i,val)=>[cx+Math.cos(ang(i))*R*val/3,cy+Math.sin(ang(i))*R*val/3];
+  const poly=arr=>arr.map((x,i)=>pt(i,x).map(n=>n.toFixed(1)).join(",")).join(" ");
+  let g="";
+  for(let l=1;l<=3;l++)g+=`<circle cx="${cx}" cy="${cy}" r="${R*l/3}" fill="none" stroke="var(--grid)"/>`;
+  for(let i=0;i<N;i++){const[x,y]=pt(i,3);g+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--grid)"/>`}
+  const gap=.035,ra=R+10;
+  D.forEach((d,di)=>{const idx=C.map((c,i)=>c.di===di?i:-1).filter(i=>i>=0);const a0=ang(idx[0])-step/2+gap,a1=ang(idx[idx.length-1])+step/2-gap;
+    g+=`<path d="M${cx+Math.cos(a0)*ra} ${cy+Math.sin(a0)*ra} A${ra} ${ra} 0 ${a1-a0>Math.PI?1:0} 1 ${cx+Math.cos(a1)*ra} ${cy+Math.sin(a1)*ra}" fill="none" stroke="${COL[di]}" stroke-width="5"/>`});
+  const la=-Math.PI/2+step/2;
+  [1,2,3].forEach(k=>{if(small&&k===2)return;const r=R*k/3-3;g+=`<text x="${cx+Math.cos(la)*r+3}" y="${cy+Math.sin(la)*r+4}" font-size="12" fill="var(--ink2)">${k}</text>`});
+  const show=st.view==="both"?["a","b"]:[st.view];
+  const cmp=st.cmp&&!ex?st.cmp:null;
+  if(cmp)show.forEach(k=>{g+=`<polygon points="${poly(cmp[k])}" fill="none" stroke="${k==="a"?"var(--ink2)":"var(--vi)"}" stroke-opacity="${k==="a"?1:.6}" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>`});
+  show.slice().reverse().forEach(k=>{if(!st[k].some(x=>x!==null))return;const v=V(k),c=k==="a"?"var(--ink)":"var(--vi)";
+    g+=`<polygon points="${poly(v)}" fill="${c}" fill-opacity="${k==="a"?(ex?.05:.09):.08}" stroke="${c}" stroke-width="2" stroke-linejoin="round"${ex?' stroke-dasharray="2 3"':""}/>`;
+    v.forEach((x,i)=>{const[px,py]=pt(i,x);const un=!ans(k,i);g+=`<circle cx="${px}" cy="${py}" r="${un?3.5:4.5}" fill="${un?"var(--bg)":c}" stroke="${un?c:"var(--bg)"}" stroke-width="${un?1.5:2}"/>`})});
+  C.forEach((c,i)=>{const a=ang(i),lr=R+(small?24:28),x=cx+Math.cos(a)*lr,y=cy+Math.sin(a)*lr,co=Math.cos(a);const anc=Math.abs(co)<.2?"middle":co>0?"start":"end";
+    g+=`<text x="${x}" y="${y+5}" text-anchor="${anc}" font-size="13" font-weight="700" fill="${ex||both(i)?"var(--ink)":"var(--ink2)"}">${c.code}</text>`});
+  C.forEach((c,i)=>{const[x,y]=pt(i,3);g+=`<line class="hit" data-i="${i}" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="transparent" stroke-width="18"/>`});
+  s.innerHTML=g;
+}
+function renderSide(){
+  const ex=isEx(),n=doneN(),cmp=st.cmp&&!ex;
+  $("radTitle").textContent=ex?"Profilo di esempio":(st.name?"Profilo di "+st.name:"Il tuo profilo");
+  $("radNote").innerHTML=ex?'<span class="ex">Esempio</span> rispondi per vedere il tuo':`${n} di ${N} competenze complete`;
+  document.querySelectorAll(".views button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===st.view));
+  const show=st.view==="both"?["a","b"]:[st.view];
+  $("legend").innerHTML=(show.includes("a")?'<span><span class="sw"></span>Io, nel mio lavoro</span>':"")+(show.includes("b")?'<span><span class="sw v"></span>Con i miei studenti</span>':"")+(cmp?`<span><span class="sw dash"></span>${esc(st.cmp.label)}</span>`:"")+D.map((d,i)=>`<span><span class="dot" style="background:${COL[i]}"></span>${esc(d.short)}</span>`).join("");
+  const va=V("a"),vb=V("b");
+  $("rows").innerHTML=D.map((d,di)=>{const line=(k,arr,col)=>{const m=avg(arr,di),c=cmp?avg(st.cmp[k],di):null;return `<div class="bl"><div class="track"><div class="fill" style="width:${m/3*100}%;background:${col}"></div>${c===null?"":`<div class="mark" style="left:calc(${c/3*100}% - 1px)"></div>`}</div><span class="val">${k==="a"?"Io":"Studenti"} <b>${fmt(m)}</b></span></div>`};
+    return `<div class="row"><span><span class="dot" style="background:${COL[di]};display:inline-block;margin-right:6px;vertical-align:-1px"></span>${esc(d.short)}</span><div class="pair">${line("a",va,"var(--ink)")}${line("b",vb,"var(--vi)")}</div></div>`}).join("")+`<p class="note">Media per ambito, da 0 a 3. Gli anelli della ragnatela indicano i livelli 1, 2 e 3.${cmp?" Il trattino grigio indica il punto di partenza.":""}</p>`;
+  $("stTxt").textContent=none()?"Inizia a rispondere":`${n} di ${N} competenze complete`;
+  drawRadar();
+}
+function chip(c){return `<span class="code" style="background:${c.col}">${c.code}</span>`}
+function renderResults(){
+  const ex=isEx(),va=V("a"),vb=V("b"),n=doneN(),cmp=st.cmp&&!ex?st.cmp:null;
+  $("resLead").textContent=none()?"Rispondi alle domande: qui comparirà il tuo resoconto.":(n<N?`Hai completato ${n} competenze su ${N}. I suggerimenti considerano solo le risposte date.`:"Hai completato tutte le 19 competenze.");
+  const ok=i=>ex||both(i);
+  const gaps=C.map((c,i)=>i).filter(i=>ok(i)&&va[i]!==vb[i]).sort((x,y)=>Math.abs(va[y]-vb[y])-Math.abs(va[x]-vb[x])||x-y).slice(0,4);
+  $("gaps").innerHTML=gaps.length?gaps.map(i=>{const c=C[i],up=va[i]>vb[i];
+    return `<div class="step"><h3>${chip(c)}${esc(c.s)}</h3><p class="lvl">Io: ${LA[va[i]]} · Con gli studenti: ${LB[vb[i]]}</p><p>${up?`<b>La padroneggi, ma non la fai ancora sviluppare.</b> Prova: ${esc(c.x)}`:(va[i]<3?`<b>La porti in classe: rafforza anche la tua competenza.</b> Passo successivo (${LA[va[i]+1]}): ${esc(c.l[va[i]])}`:`<b>La padroneggi e la porti in classe.</b>`)}</p></div>`}).join(""):`<div class="step"><p>${n?"Le due risposte coincidono per tutte le competenze completate.":"Completa almeno una competenza (entrambe le domande)."}</p></div>`;
+  const low=C.map((c,i)=>i).filter(i=>ans("a",i)&&va[i]<3).sort((x,y)=>va[x]-va[y]||x-y).slice(0,3);
+  $("steps").innerHTML=low.length?low.map(i=>{const c=C[i];return `<div class="step"><h3>${chip(c)}${esc(c.s)} <span class="lvl">· oggi: ${LA[va[i]]}</span></h3><p><b>Passo successivo (${LA[va[i]+1]}):</b> ${esc(c.l[va[i]])}</p></div>`}).join(""):`<div class="step"><p>${st.a.some(v=>v!==null)||ex?"Sei al livello avanzato in tutte le competenze a cui hai risposto.":"Rispondi alla domanda «Io» per vedere i tuoi passi successivi."}</p></div>`;
+  const hi=C.map((c,i)=>i).filter(i=>ok(i)&&va[i]+vb[i]>0).sort((x,y)=>(va[y]+vb[y])-(va[x]+vb[x])||x-y).slice(0,3);
+  $("forze").innerHTML=hi.length?hi.map(i=>{const c=C[i];return `<div class="step"><h3>${chip(c)}${esc(c.s)}</h3><p class="lvl">Io: ${LA[va[i]]} · Con gli studenti: ${LB[vb[i]]}</p></div>`}).join(""):'<div class="step"><p>Ancora nessun punto di forza: è normale all\'inizio.</p></div>';
+  $("codice").textContent=none()?"—":codeOf();
+  $("unCmp").disabled=!st.cmp;$("dl").disabled=none();
+  const cell=(k,i)=>ex?lab(k,(k==="a"?EXA:EXB)[i]):(st[k][i]===null?"—":lab(k,st[k][i]))+(cmp?` <span class="note">(prima: ${lab(k,cmp[k][i])})</span>`:"");
+  $("tbody").innerHTML=C.map((c,i)=>`<tr><td><b>${c.code}</b></td><td>${esc(c.s)}</td><td>${cell("a",i)}</td><td>${cell("b",i)}</td></tr>`).join("");
+}
+function renderAll(){renderTabs();renderDom();renderSide();renderResults()}
+function rerender(){renderTabs();renderSide();renderResults();save()}
+const goTab=t=>{st.tab=t;renderTabs();renderDom();save();$("tabs").scrollIntoView({block:"start",behavior:"smooth"})};
+
+$("dom").addEventListener("change",e=>{const t=e.target;if(t.type!=="radio")return;st[t.dataset.k][+t.dataset.i]=+t.value;
+  t.closest(".opts").querySelectorAll(".opt").forEach(o=>o.classList.toggle("on",o.querySelector("input").checked));rerender()});
+$("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b){st.tab=+b.dataset.t;renderTabs();renderDom();save()}});
+$("prev").addEventListener("click",()=>{if(st.tab>0)goTab(st.tab-1)});
+$("next").addEventListener("click",()=>{if(st.tab<D.length-1)goTab(st.tab+1);else $("results").scrollIntoView({behavior:"smooth"})});
+$("goRes").addEventListener("click",()=>$("results").scrollIntoView({behavior:"smooth"}));
+$("stBtn").addEventListener("click",()=>$("side").scrollIntoView({behavior:"smooth"}));
+document.querySelector(".views").addEventListener("click",e=>{const b=e.target.closest("button");if(b){st.view=b.dataset.v;renderSide();save()}});
+let armed=false;
+$("reset").addEventListener("click",()=>{if(!armed){armed=true;$("reset").textContent="Confermi? Clic di nuovo";setTimeout(()=>{armed=false;$("reset").textContent="Ricomincia"},4000);return}
+  armed=false;$("reset").textContent="Ricomincia";st.a=Array(N).fill(null);st.b=Array(N).fill(null);st.tab=0;save();renderAll()});
+$("nome").value=st.name||"";
+$("nome").addEventListener("input",e=>{st.name=e.target.value.trim().slice(0,60);renderSide();save()});
+const dlReady=(window.claude&&typeof window.claude.use==="function")?window.claude.use("downloads").catch(()=>null):Promise.resolve(null);
+$("dl").addEventListener("click",async()=>{const t=report(),nm=("AILit-autovalutazione"+(st.name?"-"+st.name:"")+"-"+new Date().toISOString().slice(0,10)).replace(/[^A-Za-z0-9-]+/g,"_")+".txt";
+  const ns=await dlReady;
+  if(ns){try{await ns.save({filename:nm,data:"﻿"+t});$("cmpMsg").textContent="Ho scaricato il file «"+nm+"». Conservalo: ti servirà per il confronto."}
+    catch(e){$("cmpMsg").textContent=e&&e.code==="declined"?"Download annullato.":"Download non disponibile qui: usa «Copia il resoconto» e incollalo in un documento."}return}
+  try{const u=URL.createObjectURL(new Blob(["﻿"+t],{type:"text/plain;charset=utf-8"})),a=document.createElement("a");a.href=u;a.download=nm;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);
+    $("cmpMsg").textContent="Ho scaricato il file «"+nm+"». Conservalo: ti servirà per il confronto."}
+  catch(e){$("cmpMsg").textContent="Download non disponibile: usa «Copia il resoconto» e incollalo in un documento."}});
+$("load").addEventListener("click",()=>{$("fileIn").value="";$("fileIn").click()});
+$("fileIn").addEventListener("change",async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;let t="";
+  try{t=await f.text()}catch(err){$("cmpMsg").textContent="Non riesco a leggere il file.";return}
+  const m=t.match(/Codice risultato:\s*([0-3]{19})-?([0-3]{19})/)||t.match(/\b([0-3]{19})-?([0-3]{19})\b/);
+  if(!m){$("cmpMsg").textContent="Nel file non trovo un codice risultato. Carica il file scaricato da questa pagina.";return}
+  const dt=(t.match(/(\d{1,2}\/\d{1,2}\/\d{4})/)||[])[1];
+  st.cmp={a:m[1].split("").map(Number),b:m[2].split("").map(Number),label:dt?"Risultato del "+dt:"Risultato caricato"};
+  $("cmpMsg").textContent="Confronto attivo: le linee tratteggiate mostrano il "+(dt?"risultato del "+dt:"risultato caricato")+".";rerender()});
+$("unCmp").addEventListener("click",()=>{st.cmp=null;$("cmpMsg").textContent="Confronto rimosso.";rerender()});
+$("cmpGo").addEventListener("click",()=>{const s=$("cmpIn").value.replace(/[^0-9]/g,"");if(!/^[0-3]{38}$/.test(s)){$("cmpMsg").textContent="Il codice deve avere 38 cifre, ognuna da 0 a 3 (il trattino al centro è facoltativo).";return}
+  const d=s.split("").map(Number);st.cmp={a:d.slice(0,N),b:d.slice(N),label:"Codice inserito"};$("cmpMsg").textContent="Confronto attivo: le linee tratteggiate mostrano il codice inserito.";rerender()});
+function report(){const ex=isEx(),va=V("a"),vb=V("b"),L=[];
+  L.push("Autovalutazione AILit per docenti"+(st.name?" – "+st.name:"")+" – "+new Date().toLocaleDateString("it-IT"));
+  L.push(ex?"(profilo di esempio)":"Codice risultato: "+codeOf()+" ("+doneN()+"/19 competenze complete)");
+  L.push("","Media per ambito (0-3), io / con i miei studenti:");
+  D.forEach((d,di)=>L.push("- "+d.name+": "+fmt(avg(va,di))+" / "+fmt(avg(vb,di))));
+  L.push("","Per competenza (io / con i miei studenti):");
+  C.forEach((c,i)=>L.push("- "+c.code+" "+c.s+": "+(ans("a",i)?LA[va[i]]:"—")+" / "+(ans("b",i)?LB[vb[i]]:"—")));
+  const low=C.map((c,i)=>i).filter(i=>ans("a",i)&&va[i]<3).sort((x,y)=>va[x]-va[y]||x-y).slice(0,3);
+  if(low.length){L.push("","Prossimi passi personali:");low.forEach(i=>L.push("- "+C[i].code+" ("+LA[va[i]+1]+"): "+C[i].l[va[i]]))}
+  if(!ex)L.push("","Per il confronto: quando ripeti l'autovalutazione, carica questo file con il pulsante «Carica un risultato salvato».");
+  L.push("","Fonte: OECD / Unione europea (2026), AILit Framework, CC BY 4.0 (adattamento).");
+  return L.join("\n")}
+$("copy").addEventListener("click",()=>{const t=report(),box=$("copyBox");
+  const fb=()=>{box.hidden=false;box.value=t;box.focus();box.select();$("copyMsg").textContent="Copia automatica non disponibile: il testo è selezionato qui sotto, premi Ctrl+C (o Cmd+C)."};
+  try{navigator.clipboard.writeText(t).then(()=>{box.hidden=true;$("copyMsg").textContent="Resoconto copiato. Puoi incollarlo in un documento, in una mail o in un Padlet."},fb)}catch(e){fb()}});
+const tip=$("tip"),fig=$("fig");
+fig.addEventListener("pointermove",e=>{const h=e.target.closest&&e.target.closest(".hit");if(!h){tip.style.opacity=0;return}
+  const i=+h.dataset.i,c=C[i],r=fig.getBoundingClientRect(),cmp=st.cmp&&!isEx()?st.cmp:null;
+  tip.innerHTML=`<b>${c.code} · ${esc(c.s)}</b><br>${esc(c.dom)}<br>Io: ${ans("a",i)?LA[V("a")[i]]:"—"}<br>Con gli studenti: ${ans("b",i)?LB[V("b")[i]]:"—"}${cmp?`<br>Prima: ${LA[cmp.a[i]]} / ${LB[cmp.b[i]]}`:""}${isEx()?"<br>(esempio)":""}`;
+  let x=e.clientX-r.left+12,y=e.clientY-r.top+12;if(x>r.width-240)x=e.clientX-r.left-242;if(y>r.height-100)y=e.clientY-r.top-100;
+  tip.style.left=Math.max(0,x)+"px";tip.style.top=Math.max(0,y)+"px";tip.style.opacity=1});
+fig.addEventListener("pointerleave",()=>{tip.style.opacity=0});
+const ro=new ResizeObserver(drawRadar);ro.observe($("rad"));
+renderAll();
+}
+</script>
+</body>
+</html>
