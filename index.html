@@ -155,7 +155,6 @@ body[data-step="0"] #backQ,body[data-step="2"] #goRes{display:none}
 .emb body,.emb .top,.emb .results{background:transparent}
 .emb .band{padding-left:0;padding-right:0}
 .emb .wrap,.emb .main{max-width:none}
-.namef{margin-top:12px;max-width:24em}
 .emb #mainBand{padding-top:6px}
 @media(prefers-reduced-motion:reduce){.tip{transition:none}}
 </style>
@@ -218,7 +217,6 @@ body[data-step="0"] #backQ,body[data-step="2"] #goRes{display:none}
     <aside class="side" id="side">
       <div class="panel">
         <div class="phead"><h2 id="radTitle">Il tuo profilo</h2><span class="note" id="radNote"></span></div>
-        <div class="namef"><label class="f" for="nome">Il tuo nome (facoltativo, compare nel resoconto)</label><input type="text" id="nome" autocomplete="off" placeholder="Per esempio, Anna R."></div>
         <div class="views" role="group" aria-label="Linee da mostrare"><button type="button" data-v="both" aria-pressed="true">Entrambe</button><button type="button" data-v="a" aria-pressed="false">Solo io</button><button type="button" data-v="b" aria-pressed="false">Solo con gli studenti</button></div>
         <div class="legend" id="legend"></div>
         <div class="fig" id="fig"><svg id="rad" role="img" aria-label="Grafico a ragnatela delle 19 competenze AILit: competenza personale e competenza didattica"></svg><div class="tip" id="tip"></div></div>
@@ -375,8 +373,6 @@ document.querySelector(".views").addEventListener("click",e=>{const b=e.target.c
 let armed=false;
 $("reset").addEventListener("click",()=>{if(!armed){armed=true;$("reset").textContent="Confermi? Clic di nuovo";setTimeout(()=>{armed=false;$("reset").textContent="Ricomincia"},4000);return}
   armed=false;$("reset").textContent="Ricomincia";st.a=Array(N).fill(null);st.b=Array(N).fill(null);st.tab=0;st.cur=0;save();renderAll();goStep(0)});
-$("nome").value=st.name||"";
-$("nome").addEventListener("input",e=>{st.name=e.target.value.trim().slice(0,60);renderSide();save()});
 const dlReady=(window.claude&&typeof window.claude.use==="function")?window.claude.use("downloads").catch(()=>null):Promise.resolve(null);
 $("dl").addEventListener("click",async()=>{const t=report(),nm=("AILit-autovalutazione"+(st.name?"-"+st.name:"")+"-"+new Date().toISOString().slice(0,10)).replace(/[^A-Za-z0-9-]+/g,"_")+".txt";
   const ns=await dlReady;
