@@ -155,7 +155,12 @@ body[data-step="0"] #backQ,body[data-step="2"] #goRes{display:none}
 .emb .band,.emb .stepbar{padding-left:0;padding-right:0}
 .emb .top{padding-top:8px}
 .emb .wrap,.emb .main{max-width:none}
-.emb .top .wrap{grid-template-columns:minmax(0,1fr) minmax(0,20em)}
+.top .wrap{grid-template-columns:minmax(0,1fr)}
+.namef{margin-top:12px;max-width:24em}
+.stepbar .wrap{justify-content:flex-start}
+.emb .top{padding:4px 0 18px}
+.emb #mainBand{padding-top:22px}
+.emb .lead,.emb .how{max-width:90ch}
 @media(prefers-reduced-motion:reduce){.tip{transition:none}}
 </style>
 </head>
@@ -167,7 +172,6 @@ body[data-step="0"] #backQ,body[data-step="2"] #goRes{display:none}
       <p class="lead">Per ognuna delle 19 competenze del framework AILit (OCSE e Commissione europea, 2026) rispondi a due domande: quanto la padroneggi tu e quanto la fai sviluppare ai tuoi studenti. La ragnatela confronta le risposte e ti indica da dove ripartire.</p>
       <p class="how" style="padding-left:0;max-width:none">Scegli la descrizione più vicina a ciò che fai <b>oggi</b>, non a ciò che vorresti fare.</p>
     </div>
-    <div><label class="f" for="nome">Nome (facoltativo)</label><input type="text" id="nome" autocomplete="off" placeholder="Per esempio, Anna R."></div>
   </div>
 </header>
 
@@ -226,6 +230,7 @@ body[data-step="0"] #backQ,body[data-step="2"] #goRes{display:none}
     <aside class="side" id="side">
       <div class="panel">
         <div class="phead"><h2 id="radTitle">Il tuo profilo</h2><span class="note" id="radNote"></span></div>
+        <div class="namef"><label class="f" for="nome">Il tuo nome (facoltativo, compare nel resoconto)</label><input type="text" id="nome" autocomplete="off" placeholder="Per esempio, Anna R."></div>
         <div class="views" role="group" aria-label="Linee da mostrare"><button type="button" data-v="both" aria-pressed="true">Entrambe</button><button type="button" data-v="a" aria-pressed="false">Solo io</button><button type="button" data-v="b" aria-pressed="false">Solo con gli studenti</button></div>
         <div class="legend" id="legend"></div>
         <div class="fig" id="fig"><svg id="rad" role="img" aria-label="Grafico a ragnatela delle 19 competenze AILit: competenza personale e competenza didattica"></svg><div class="tip" id="tip"></div></div>
