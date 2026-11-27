@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;800&display=swap" rel="stylesheet">
+<script>try{if(window.self!==window.top){document.documentElement.classList.add("emb");document.documentElement.dataset.theme="light"}}catch(e){document.documentElement.classList.add("emb");document.documentElement.dataset.theme="light"}</script>
 <style>
 /* VOICE everyday-work: strumento di formazione docenti, chiaro e calmo
    IDEA la scheda di osservazione a due colonne: io / con i miei studenti
@@ -118,19 +119,22 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertic
 .foot{font-size:13px;color:var(--ink2)}
 .foot p+p{margin-top:6px}
 .foot a{color:inherit}
-/* VISTA A BLOCCHI: un passo per volta, una competenza per volta */
+/* VISTA A BLOCCHI: una competenza per volta, ragnatela sempre visibile a destra (schermi larghi) */
 .stepbar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px max(5vw,16px)}
 .stepbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap}
-.stepbtns{display:flex;gap:6px;flex-wrap:wrap}
+.stepbtns{display:flex;gap:6px;flex-wrap:wrap;counter-reset:st}
 .stepbtns button{border-color:var(--line);font-weight:500;display:flex;gap:8px;align-items:center;min-height:40px;padding:6px 12px}
 .stepbtns button[aria-current=step]{border-color:var(--ink);background:var(--ink);color:var(--bg);font-weight:700}
 .sn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;font-size:13px;font-weight:700}
-.main{grid-template-columns:minmax(0,1fr);max-width:860px}
-.side{position:static;max-width:760px;margin:0 auto;width:100%}
-body[data-step="0"] #side,body[data-step="0"] #results{display:none}
-body[data-step="1"] #quest,body[data-step="1"] #results,body[data-step="1"] header.top{display:none}
-body[data-step="2"] #mainBand,body[data-step="2"] header.top{display:none}
-body:not([data-step="2"]) footer.foot,body.later header.top{display:none}
+.sn::before{counter-increment:st;content:counter(st)}
+.main{grid-template-columns:minmax(0,1.3fr) minmax(330px,1fr);max-width:1440px}
+.side{position:sticky;top:72px}
+.results{padding:0}
+.results>div>h2{margin-top:4px}
+body[data-step="0"] #results,body[data-step="2"] #quest{display:none}
+body[data-step="1"] #results,body[data-step="1"] #quest{display:none}
+body:not([data-step="0"]) header.top,body.later header.top,body:not([data-step="2"]) footer.foot{display:none}
+body[data-step="0"] #backQ,body[data-step="2"] #goRes{display:none}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 14px}
 .chip{min-height:36px;min-width:44px;padding:2px 8px;font-size:14px;font-weight:700;border:1.5px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink2)}
 .chip.half{border-style:dashed;border-color:var(--chip);color:var(--ink)}
@@ -140,9 +144,18 @@ body:not([data-step="2"]) footer.foot,body.later header.top{display:none}
 .nav{align-items:center;border-top:1px solid var(--line);padding-top:14px}
 .nav #pos{flex:1;text-align:center}
 .nav .primary.ready{box-shadow:0 0 0 3px var(--yel)}
-@media(max-width:900px){.res{grid-template-columns:minmax(0,1fr)}.top .wrap{grid-template-columns:minmax(0,1fr)}}
+@media(min-width:901px){.stepbtns [data-s="1"],#backR{display:none}}
+@media(min-width:901px) and (max-width:1250px){.res{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:900px){.main,.res{grid-template-columns:minmax(0,1fr)}.side{position:static;max-width:760px;margin:0 auto;width:100%}.top .wrap{grid-template-columns:minmax(0,1fr)}
+  body[data-step="0"] #side,body[data-step="2"] #side{display:none}}
 @media(max-width:600px){.nav #pos{order:-1;flex-basis:100%}.stepbtns button{padding:6px 9px;font-size:14px}}
 @media(max-width:600px){.fig{height:340px}.opt{grid-template-columns:minmax(0,1fr);gap:2px}.row{grid-template-columns:minmax(0,1fr)}table{font-size:13px}th,td{padding:6px 4px}}
+/* INCORPORATA NEL BLOG: niente sfondo, niente margini laterali, sempre chiara */
+.emb body,.emb .top,.emb .results{background:transparent}
+.emb .band,.emb .stepbar{padding-left:0;padding-right:0}
+.emb .top{padding-top:8px}
+.emb .wrap,.emb .main{max-width:none}
+.emb .top .wrap{grid-template-columns:minmax(0,1fr) minmax(0,20em)}
 @media(prefers-reduced-motion:reduce){.tip{transition:none}}
 </style>
 </head>
@@ -160,35 +173,22 @@ body:not([data-step="2"]) footer.foot,body.later header.top{display:none}
 
 <nav class="stepbar" id="stepbar" aria-label="Passi dell'autovalutazione">
   <div class="wrap">
-    <div class="stepbtns"><button type="button" data-s="0"><span class="sn">1</span>Rispondi</button><button type="button" data-s="1"><span class="sn">2</span>Ragnatela</button><button type="button" data-s="2"><span class="sn">3</span>Risultati</button></div>
+    <div class="stepbtns"><button type="button" data-s="0"><span class="sn"></span>Rispondi</button><button type="button" data-s="1"><span class="sn"></span>Ragnatela</button><button type="button" data-s="2"><span class="sn"></span>Risultati</button></div>
     <span class="note" id="stTxt" role="status">0 di 19 competenze</span>
   </div>
 </nav>
 
 <main class="band" id="mainBand">
   <div class="wrap main">
+    <div class="lcol">
     <section aria-label="Questionario" id="quest">
       <div class="tabs" role="tablist" id="tabs"></div>
       <div class="chips" id="chips" aria-label="Competenze dell'ambito"></div>
       <div id="dom"></div>
       <div class="nav"><button type="button" id="prev">← Precedente</button><span class="note" id="pos"></span><button type="button" class="primary" id="next">Successiva →</button></div>
     </section>
-
-    <aside class="side" id="side">
-      <div class="panel">
-        <div class="phead"><h2 id="radTitle">Il tuo profilo</h2><span class="note" id="radNote"></span></div>
-        <div class="views" role="group" aria-label="Linee da mostrare"><button type="button" data-v="both" aria-pressed="true">Entrambe</button><button type="button" data-v="a" aria-pressed="false">Solo io</button><button type="button" data-v="b" aria-pressed="false">Solo con gli studenti</button></div>
-        <div class="legend" id="legend"></div>
-        <div class="fig" id="fig"><svg id="rad" role="img" aria-label="Grafico a ragnatela delle 19 competenze AILit: competenza personale e competenza didattica"></svg><div class="tip" id="tip"></div></div>
-        <div class="rows" id="rows"></div>
-        <div class="acts"><button type="button" id="backQ">← Torna alle domande</button><button type="button" class="primary" id="goRes">Vedi i risultati →</button><button type="button" id="reset">Ricomincia</button></div>
-      </div>
-    </aside>
-  </div>
-</main>
-
-<section class="band results" id="results">
-  <div class="wrap">
+<section class="results" id="results">
+  <div>
     <div class="acts" style="margin:0 0 16px"><button type="button" id="backR">← Torna alla ragnatela</button><button type="button" id="backQ2">← Torna alle domande</button></div>
     <h2>Risultati e prossimi passi</h2>
     <p class="lead" id="resLead"></p>
@@ -221,6 +221,22 @@ body:not([data-step="2"]) footer.foot,body.later header.top{display:none}
     </details>
   </div>
 </section>
+    </div>
+
+    <aside class="side" id="side">
+      <div class="panel">
+        <div class="phead"><h2 id="radTitle">Il tuo profilo</h2><span class="note" id="radNote"></span></div>
+        <div class="views" role="group" aria-label="Linee da mostrare"><button type="button" data-v="both" aria-pressed="true">Entrambe</button><button type="button" data-v="a" aria-pressed="false">Solo io</button><button type="button" data-v="b" aria-pressed="false">Solo con gli studenti</button></div>
+        <div class="legend" id="legend"></div>
+        <div class="fig" id="fig"><svg id="rad" role="img" aria-label="Grafico a ragnatela delle 19 competenze AILit: competenza personale e competenza didattica"></svg><div class="tip" id="tip"></div></div>
+        <div class="rows" id="rows"></div>
+        <div class="acts"><button type="button" id="backQ">← Torna alle domande</button><button type="button" class="primary" id="goRes">Vedi i risultati →</button><button type="button" id="reset">Ricomincia</button></div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+
 
 <footer class="band foot">
   <div class="wrap">
@@ -282,7 +298,7 @@ function renderDom(){
 function renderNav(){
   const i=st.cur;
   $("prev").disabled=i===0;
-  $("next").textContent=i===N-1?"Vedi la ragnatela →":"Successiva →";
+  $("next").textContent=i===N-1?(wide()?"Vedi i risultati →":"Vedi la ragnatela →"):"Successiva →";
   $("next").classList.toggle("ready",both(i));
   $("pos").textContent=`Competenza ${i+1} di ${N}`;
 }
@@ -344,11 +360,12 @@ function renderResults(){
 }
 function renderAll(){renderTabs();renderDom();renderSide();renderResults()}
 function rerender(){renderTabs();renderSide();renderResults();renderNav();save()}
+const MQ=matchMedia("(min-width:901px)"),wide=()=>MQ.matches;
 const toTop=()=>{const y=$("stepbar").offsetTop;if(window.scrollY>y)window.scrollTo({top:y,behavior:"smooth"})};
 const goComp=i=>{st.cur=Math.max(0,Math.min(N-1,i));renderTabs();renderDom();save();toTop()};
 const goTab=t=>{const idx=C.map((c,i)=>i).filter(i=>C[i].di===t);goComp(idx.find(i=>!both(i))??idx[0])};
 function renderSteps(){document.querySelectorAll("#stepbar [data-s]").forEach(b=>{if(+b.dataset.s===st.step)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current")})}
-const goStep=s=>{st.step=s;document.body.dataset.step=s;renderSteps();if(s===1)requestAnimationFrame(drawRadar);window.scrollTo({top:0})};
+const goStep=s=>{if(s===1&&wide())s=2;st.step=s;document.body.dataset.step=s;renderSteps();if(s===1)requestAnimationFrame(drawRadar);window.scrollTo({top:0})};
 
 $("dom").addEventListener("change",e=>{const t=e.target;if(t.type!=="radio")return;st[t.dataset.k][+t.dataset.i]=+t.value;
   t.closest(".opts").querySelectorAll(".opt").forEach(o=>o.classList.toggle("on",o.querySelector("input").checked));rerender()});
@@ -410,6 +427,7 @@ fig.addEventListener("pointermove",e=>{const h=e.target.closest&&e.target.closes
 fig.addEventListener("pointerleave",()=>{tip.style.opacity=0});
 const ro=new ResizeObserver(drawRadar);ro.observe($("rad"));
 renderAll();goStep(0);
+MQ.addEventListener("change",()=>{renderNav();if(st.step===1&&wide())goStep(2);requestAnimationFrame(drawRadar)});
 }
 </script>
 </body>
