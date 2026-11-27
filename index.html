@@ -118,12 +118,35 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertic
 .foot{font-size:13px;color:var(--ink2)}
 .foot p+p{margin-top:6px}
 .foot a{color:inherit}
-@media(max-width:900px){.main,.res{grid-template-columns:minmax(0,1fr)}.side{position:static;order:-1}.sticky{display:flex;position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px max(5vw,16px);justify-content:space-between;align-items:center;font-size:14px;gap:10px}.top .wrap{grid-template-columns:minmax(0,1fr)}}
+/* VISTA A BLOCCHI: un passo per volta, una competenza per volta */
+.stepbar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px max(5vw,16px)}
+.stepbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap}
+.stepbtns{display:flex;gap:6px;flex-wrap:wrap}
+.stepbtns button{border-color:var(--line);font-weight:500;display:flex;gap:8px;align-items:center;min-height:40px;padding:6px 12px}
+.stepbtns button[aria-current=step]{border-color:var(--ink);background:var(--ink);color:var(--bg);font-weight:700}
+.sn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;font-size:13px;font-weight:700}
+.main{grid-template-columns:minmax(0,1fr);max-width:860px}
+.side{position:static;max-width:760px;margin:0 auto;width:100%}
+body[data-step="0"] #side,body[data-step="0"] #results{display:none}
+body[data-step="1"] #quest,body[data-step="1"] #results,body[data-step="1"] header.top{display:none}
+body[data-step="2"] #mainBand,body[data-step="2"] header.top{display:none}
+body:not([data-step="2"]) footer.foot,body.later header.top{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 14px}
+.chip{min-height:36px;min-width:44px;padding:2px 8px;font-size:14px;font-weight:700;border:1.5px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink2)}
+.chip.half{border-style:dashed;border-color:var(--chip);color:var(--ink)}
+.chip.full{background:var(--chip);border-color:var(--chip);color:#fff}
+.chip[aria-current=true]{outline:3px solid var(--ink);outline-offset:2px}
+.comp{border-top:1px solid var(--line);padding:18px 0 16px}
+.nav{align-items:center;border-top:1px solid var(--line);padding-top:14px}
+.nav #pos{flex:1;text-align:center}
+.nav .primary.ready{box-shadow:0 0 0 3px var(--yel)}
+@media(max-width:900px){.res{grid-template-columns:minmax(0,1fr)}.top .wrap{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.nav #pos{order:-1;flex-basis:100%}.stepbtns button{padding:6px 9px;font-size:14px}}
 @media(max-width:600px){.fig{height:340px}.opt{grid-template-columns:minmax(0,1fr);gap:2px}.row{grid-template-columns:minmax(0,1fr)}table{font-size:13px}th,td{padding:6px 4px}}
 @media(prefers-reduced-motion:reduce){.tip{transition:none}}
 </style>
 </head>
-<body>
+<body data-step="0">
 <header class="band top">
   <div class="wrap">
     <div>
@@ -135,14 +158,20 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertic
   </div>
 </header>
 
-<div class="sticky"><span id="stTxt">0 di 19 competenze</span><button id="stBtn" type="button">Vedi la ragnatela</button></div>
+<nav class="stepbar" id="stepbar" aria-label="Passi dell'autovalutazione">
+  <div class="wrap">
+    <div class="stepbtns"><button type="button" data-s="0"><span class="sn">1</span>Rispondi</button><button type="button" data-s="1"><span class="sn">2</span>Ragnatela</button><button type="button" data-s="2"><span class="sn">3</span>Risultati</button></div>
+    <span class="note" id="stTxt" role="status">0 di 19 competenze</span>
+  </div>
+</nav>
 
-<main class="band">
+<main class="band" id="mainBand">
   <div class="wrap main">
-    <section aria-label="Questionario">
+    <section aria-label="Questionario" id="quest">
       <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="chips" id="chips" aria-label="Competenze dell'ambito"></div>
       <div id="dom"></div>
-      <div class="nav"><button type="button" id="prev">← Ambito precedente</button><button type="button" class="primary" id="next">Ambito successivo →</button></div>
+      <div class="nav"><button type="button" id="prev">← Precedente</button><span class="note" id="pos"></span><button type="button" class="primary" id="next">Successiva →</button></div>
     </section>
 
     <aside class="side" id="side">
@@ -152,7 +181,7 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertic
         <div class="legend" id="legend"></div>
         <div class="fig" id="fig"><svg id="rad" role="img" aria-label="Grafico a ragnatela delle 19 competenze AILit: competenza personale e competenza didattica"></svg><div class="tip" id="tip"></div></div>
         <div class="rows" id="rows"></div>
-        <div class="acts"><button type="button" class="primary" id="goRes">Vedi i risultati</button><button type="button" id="reset">Ricomincia</button></div>
+        <div class="acts"><button type="button" id="backQ">← Torna alle domande</button><button type="button" class="primary" id="goRes">Vedi i risultati →</button><button type="button" id="reset">Ricomincia</button></div>
       </div>
     </aside>
   </div>
@@ -160,6 +189,7 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertic
 
 <section class="band results" id="results">
   <div class="wrap">
+    <div class="acts" style="margin:0 0 16px"><button type="button" id="backR">← Torna alla ragnatela</button><button type="button" id="backQ2">← Torna alle domande</button></div>
     <h2>Risultati e prossimi passi</h2>
     <p class="lead" id="resLead"></p>
     <div class="res">
@@ -212,7 +242,7 @@ const N=C.length;
 const EXA=[2,2,2,1,1,2,1,2,2,2,1,2,1,1,1,1,0,0,1];
 const EXB=[1,1,2,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0];
 const KEY="ailit-docenti-v1";
-let st={a:Array(N).fill(null),b:Array(N).fill(null),name:"",cmp:null,tab:0,view:"both"};
+let st={a:Array(N).fill(null),b:Array(N).fill(null),name:"",cmp:null,tab:0,view:"both",cur:0,step:0};
 try{localStorage.removeItem(KEY)}catch(e){}
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -230,6 +260,8 @@ const lab=(k,v)=>(k==="a"?LA:LB)[v];
 
 function renderTabs(){
   $("tabs").innerHTML=D.map((d,i)=>{const n=C.filter((c,k)=>c.di===i&&both(k)).length;return `<button type="button" class="tab" role="tab" aria-selected="${i===st.tab}" data-t="${i}"><span class="dot" style="background:${COL[i]}"></span>${esc(d.name)} <span class="cnt">${n}/${d.items.length}</span></button>`}).join("");
+  $("chips").innerHTML=C.map((c,i)=>{if(c.di!==st.tab)return"";const f=both(i),h=!f&&(st.a[i]!==null||st.b[i]!==null);
+    return `<button type="button" class="chip${f?" full":h?" half":""}" style="--chip:${c.col}" data-c="${i}" aria-current="${i===st.cur}" title="${esc(c.s)}${f?" (completa)":h?" (a metà)":""}">${c.code}</button>`}).join("");
 }
 function optList(k,i){
   const texts=k==="a"?["Non mi riconosco ancora nella descrizione del livello base.",...C[i].l]:TB;
@@ -237,16 +269,22 @@ function optList(k,i){
   return `<div class="opts${k==="b"?" did":""}" role="radiogroup" aria-label="${k==="a"?"Io":"Con i miei studenti"}, ${C[i].code}">`+texts.map((t,v)=>{const on=st[k][i]===v;return `<label class="opt${on?" on":""}"><input type="radio" name="${k}${i}" value="${v}" data-i="${i}" data-k="${k}"${on?" checked":""}><b><i></i>${labels[v]}</b><span>${esc(t)}</span></label>`}).join("")+`</div>`;
 }
 function renderDom(){
-  const d=D[st.tab];
+  const i=st.cur,c=C[i];st.tab=c.di;const d=D[st.tab];
   let h=`<div class="dhead"><div class="bar" style="background:${COL[st.tab]}"></div><div><h2>${esc(d.name)}</h2><p>${esc(d.sub)}</p></div></div>`;
-  C.forEach((c,i)=>{if(c.di!==st.tab)return;
-    h+=`<div class="comp" id="c-${c.code}"><h3><span class="code" style="background:${c.col}">${c.code}</span>${esc(c.q)}</h3><p class="fw">Nel framework: ${esc(c.f)}</p><p class="expl">${esc(c.e)}</p>`;
-    h+=`<h4><span class="badge b1">1 · Io</span>nel mio lavoro</h4>`+optList("a",i);
-    h+=`<h4><span class="badge b2">2 · Con i miei studenti</span>in classe</h4>`+optList("b",i);
-    h+=`<p class="idea"><b>Un'attività per iniziare:</b> ${esc(c.x)}</p></div>`});
+  h+=`<div class="comp" id="c-${c.code}"><h3><span class="code" style="background:${c.col}">${c.code}</span>${esc(c.q)}</h3><p class="fw">Nel framework: ${esc(c.f)}</p><p class="expl">${esc(c.e)}</p>`;
+  h+=`<h4><span class="badge b1">1 · Io</span>nel mio lavoro</h4>`+optList("a",i);
+  h+=`<h4><span class="badge b2">2 · Con i miei studenti</span>in classe</h4>`+optList("b",i);
+  h+=`<p class="idea"><b>Un'attività per iniziare:</b> ${esc(c.x)}</p></div>`;
   $("dom").innerHTML=h;
-  $("prev").disabled=st.tab===0;
-  $("next").textContent=st.tab===D.length-1?"Vedi i risultati →":"Ambito successivo →";
+  document.body.classList.toggle("later",i>0);
+  renderNav();
+}
+function renderNav(){
+  const i=st.cur;
+  $("prev").disabled=i===0;
+  $("next").textContent=i===N-1?"Vedi la ragnatela →":"Successiva →";
+  $("next").classList.toggle("ready",both(i));
+  $("pos").textContent=`Competenza ${i+1} di ${N}`;
 }
 function drawRadar(){
   const s=$("rad"),W=s.clientWidth,Hh=s.clientHeight;if(!W||!Hh)return;
@@ -284,7 +322,7 @@ function renderSide(){
   const va=V("a"),vb=V("b");
   $("rows").innerHTML=D.map((d,di)=>{const line=(k,arr,col)=>{const m=avg(arr,di),c=cmp?avg(st.cmp[k],di):null;return `<div class="bl"><div class="track"><div class="fill" style="width:${m/3*100}%;background:${col}"></div>${c===null?"":`<div class="mark" style="left:calc(${c/3*100}% - 1px)"></div>`}</div><span class="val">${k==="a"?"Io":"Studenti"} <b>${fmt(m)}</b></span></div>`};
     return `<div class="row"><span><span class="dot" style="background:${COL[di]};display:inline-block;margin-right:6px;vertical-align:-1px"></span>${esc(d.short)}</span><div class="pair">${line("a",va,"var(--ink)")}${line("b",vb,"var(--vi)")}</div></div>`}).join("")+`<p class="note">Media per ambito, da 0 a 3. Gli anelli della ragnatela indicano i livelli 1, 2 e 3.${cmp?" Il trattino grigio indica il punto di partenza.":""}</p>`;
-  $("stTxt").textContent=none()?"Inizia a rispondere":`${n} di ${N} competenze complete`;
+  $("stTxt").textContent=none()?"Inizia a rispondere":`${n} di ${N} competenze complete`;renderSteps();
   drawRadar();
 }
 function chip(c){return `<span class="code" style="background:${c.col}">${c.code}</span>`}
@@ -305,20 +343,28 @@ function renderResults(){
   $("tbody").innerHTML=C.map((c,i)=>`<tr><td><b>${c.code}</b></td><td>${esc(c.s)}</td><td>${cell("a",i)}</td><td>${cell("b",i)}</td></tr>`).join("");
 }
 function renderAll(){renderTabs();renderDom();renderSide();renderResults()}
-function rerender(){renderTabs();renderSide();renderResults();save()}
-const goTab=t=>{st.tab=t;renderTabs();renderDom();save();$("tabs").scrollIntoView({block:"start",behavior:"smooth"})};
+function rerender(){renderTabs();renderSide();renderResults();renderNav();save()}
+const toTop=()=>{const y=$("stepbar").offsetTop;if(window.scrollY>y)window.scrollTo({top:y,behavior:"smooth"})};
+const goComp=i=>{st.cur=Math.max(0,Math.min(N-1,i));renderTabs();renderDom();save();toTop()};
+const goTab=t=>{const idx=C.map((c,i)=>i).filter(i=>C[i].di===t);goComp(idx.find(i=>!both(i))??idx[0])};
+function renderSteps(){document.querySelectorAll("#stepbar [data-s]").forEach(b=>{if(+b.dataset.s===st.step)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current")})}
+const goStep=s=>{st.step=s;document.body.dataset.step=s;renderSteps();if(s===1)requestAnimationFrame(drawRadar);window.scrollTo({top:0})};
 
 $("dom").addEventListener("change",e=>{const t=e.target;if(t.type!=="radio")return;st[t.dataset.k][+t.dataset.i]=+t.value;
   t.closest(".opts").querySelectorAll(".opt").forEach(o=>o.classList.toggle("on",o.querySelector("input").checked));rerender()});
-$("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b){st.tab=+b.dataset.t;renderTabs();renderDom();save()}});
-$("prev").addEventListener("click",()=>{if(st.tab>0)goTab(st.tab-1)});
-$("next").addEventListener("click",()=>{if(st.tab<D.length-1)goTab(st.tab+1);else $("results").scrollIntoView({behavior:"smooth"})});
-$("goRes").addEventListener("click",()=>$("results").scrollIntoView({behavior:"smooth"}));
-$("stBtn").addEventListener("click",()=>$("side").scrollIntoView({behavior:"smooth"}));
+$("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b)goTab(+b.dataset.t)});
+$("chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(b)goComp(+b.dataset.c)});
+$("prev").addEventListener("click",()=>goComp(st.cur-1));
+$("next").addEventListener("click",()=>{if(st.cur<N-1)goComp(st.cur+1);else goStep(1)});
+$("goRes").addEventListener("click",()=>goStep(2));
+$("backQ").addEventListener("click",()=>goStep(0));
+$("backQ2").addEventListener("click",()=>goStep(0));
+$("backR").addEventListener("click",()=>goStep(1));
+$("stepbar").addEventListener("click",e=>{const b=e.target.closest("[data-s]");if(b)goStep(+b.dataset.s)});
 document.querySelector(".views").addEventListener("click",e=>{const b=e.target.closest("button");if(b){st.view=b.dataset.v;renderSide();save()}});
 let armed=false;
 $("reset").addEventListener("click",()=>{if(!armed){armed=true;$("reset").textContent="Confermi? Clic di nuovo";setTimeout(()=>{armed=false;$("reset").textContent="Ricomincia"},4000);return}
-  armed=false;$("reset").textContent="Ricomincia";st.a=Array(N).fill(null);st.b=Array(N).fill(null);st.tab=0;save();renderAll()});
+  armed=false;$("reset").textContent="Ricomincia";st.a=Array(N).fill(null);st.b=Array(N).fill(null);st.tab=0;st.cur=0;save();renderAll();goStep(0)});
 $("nome").value=st.name||"";
 $("nome").addEventListener("input",e=>{st.name=e.target.value.trim().slice(0,60);renderSide();save()});
 const dlReady=(window.claude&&typeof window.claude.use==="function")?window.claude.use("downloads").catch(()=>null):Promise.resolve(null);
@@ -363,7 +409,7 @@ fig.addEventListener("pointermove",e=>{const h=e.target.closest&&e.target.closes
   tip.style.left=Math.max(0,x)+"px";tip.style.top=Math.max(0,y)+"px";tip.style.opacity=1});
 fig.addEventListener("pointerleave",()=>{tip.style.opacity=0});
 const ro=new ResizeObserver(drawRadar);ro.observe($("rad"));
-renderAll();
+renderAll();goStep(0);
 }
 </script>
 </body>
